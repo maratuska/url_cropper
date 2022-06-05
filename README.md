@@ -4,7 +4,7 @@ Service for generating short URLs
 
 ## Dependencies
 
-- PostgresSQL
+- PostgreSQL
 
 ## Running
 
