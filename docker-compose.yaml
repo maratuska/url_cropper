@@ -6,7 +6,7 @@ services:
     build:
       context: .
     ports:
-      - "8022:8000"
+      - "8001:8000"
     environment:
       - POSTGRES_URL=postgresql+asyncpg://user_pg:password_pg@postgres/url_cropper
       - SHORT_BASE_URL=http://cr.u
@@ -19,7 +19,7 @@ services:
 
   postgres:
     container_name: uc-postgres
-    image: postgres:12.1-alpine
+    image: postgres:14.3-alpine
     ports:
       - "5432:5432"
     environment:
