@@ -12,4 +12,4 @@ Service for generating short URLs
 docker-compose up -d --build
 ```
 
-- api specification -> http://localhost:8022/docs
+- api specification -> http://localhost:8001/docs
