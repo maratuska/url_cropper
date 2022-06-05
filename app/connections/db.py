@@ -1,6 +1,8 @@
+from asyncpg import CannotConnectNowError
 from sqlmodel import SQLModel
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncConnection
 from sqlalchemy.orm import sessionmaker
+from tenacity import retry, stop_after_attempt, retry_if_exception_type, wait_random_exponential
 
 from app.settings import conf
 
@@ -29,8 +31,12 @@ async def get_session() -> AsyncSession:
         yield session
 
 
+@retry(
+    wait=wait_random_exponential(),
+    stop=stop_after_attempt(3),
+    retry=retry_if_exception_type((ConnectionRefusedError, CannotConnectNowError)),
+)
 async def init_db_and_tables():
-    from app.api.models import OriginUrl, ShortUrl
     async with engine.begin() as connection:
         connection: AsyncConnection
         await connection.run_sync(SQLModel.metadata.create_all)
