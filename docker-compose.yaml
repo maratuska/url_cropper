@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  api_service:
+    container_name: uc-api_service
+    build:
+      context: .
+    ports:
+      - "8022:8000"
+    environment:
+      - POSTGRES_URL=postgresql+asyncpg://user_pg:password_pg@postgres/url_cropper
+      - SHORT_BASE_URL=http://cr.u
+      - DEBUG_MODE=true
+    volumes:
+      - .:/app/
+    depends_on:
+      - postgres
+    command: uvicorn app.app:app_instance --reload --host 0.0.0.0 --port 8000
+
+  postgres:
+    container_name: uc-postgres
+    image: postgres:12.1-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user_pg
+      - POSTGRES_PASSWORD=password_pg
+      - POSTGRES_DB=url_cropper
